@@ -43,6 +43,8 @@ Specification.
 - Filter tags by case-insensitive partial match against tag name.
 - Preserve the submitted keyword in the search input after the page reloads.
 - Show an empty-results state when a non-empty keyword has no matches.
+- Use a tag-specific search placeholder consistent with Branches and Commits
+  search fields.
 
 ### Modified
 
@@ -90,6 +92,11 @@ Specification.
 - Given a search has no matching tags, when the page renders, then no tag rows
   are shown and the page displays a no-results state instead of falling back to
   the full list.
+- Given `q` contains only whitespace, when the tags page renders, then the page
+  behaves like an unfiltered tags page and does not preserve the whitespace in
+  the search input.
+- Given the tags search input renders, then its placeholder describes tag search
+  rather than using the generic search placeholder.
 
 ## Commands
 

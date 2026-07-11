@@ -264,6 +264,9 @@ func TestViewTagsListSearch(t *testing.T) {
 	value, exists := searchInput.Attr("value")
 	assert.True(t, exists)
 	assert.Equal(t, "DELETE", value)
+	placeholder, exists := searchInput.Attr("placeholder")
+	assert.True(t, exists)
+	assert.Equal(t, "Search tags...", placeholder)
 
 	req = NewRequest(t, "GET", repo.Link()+"/tags?q=missing-tag")
 	rsp = session.MakeRequest(t, req, http.StatusOK)
@@ -274,6 +277,21 @@ func TestViewTagsListSearch(t *testing.T) {
 	value, exists = htmlDoc.Find(`form input[name="q"]`).Attr("value")
 	assert.True(t, exists)
 	assert.Equal(t, "missing-tag", value)
+
+	req = NewRequest(t, "GET", repo.Link()+"/tags?q=%20%20")
+	rsp = session.MakeRequest(t, req, http.StatusOK)
+
+	htmlDoc = NewHTMLParser(t, rsp.Body)
+	tags = htmlDoc.Find(".tag-list-row-link")
+	assert.Equal(t, 3, tags.Length())
+
+	tagNames = make([]string, 0, 3)
+	tags.Each(func(i int, s *goquery.Selection) {
+		tagNames = append(tagNames, s.Text())
+	})
+	assert.EqualValues(t, []string{"v1.0", "delete-tag", "v1.1"}, tagNames)
+	_, exists = htmlDoc.Find(`form input[name="q"]`).Attr("value")
+	assert.False(t, exists)
 
 	req = NewRequest(t, "GET", repo.Link()+"/tags?q=V1&limit=1")
 	rsp = session.MakeRequest(t, req, http.StatusOK)

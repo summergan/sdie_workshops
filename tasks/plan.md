@@ -37,6 +37,8 @@ Design.
   - Search form method is `GET`.
   - Input name is `q`.
   - Input value is `.Keyword`.
+  - Input placeholder uses `search.tag_kind`, matching the Branches and Commits
+    search pattern.
   - Use existing shared search partials.
   - Show `no_results` only for non-empty search with no matching tags.
 
@@ -82,7 +84,8 @@ Design.
 
 - [x] Task: Implement tags page search UI.
   - Acceptance: tags page renders a GET search box, keeps the submitted keyword,
-    and shows no-results feedback for unmatched searches.
+    shows no-results feedback for unmatched searches, and uses a tag-specific
+    placeholder.
   - Verify: integration test passes.
   - Files: `templates/repo/tag/list.tmpl`.
 

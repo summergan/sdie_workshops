@@ -50,8 +50,8 @@
 - [x] Task: Write RED integration coverage.
   - SDIE mapping: Implementation / Testing.
   - Acceptance: integration test describes `/tags?q=DELETE`, visible filtered
-    rows, retained search input value, no-results state, and pagination links
-    preserving `q`.
+    rows, retained search input value, tag-specific placeholder, whitespace-only
+    `q`, no-results state, and pagination links preserving `q`.
   - RED: test failed first because `q=DELETE` returned unfiltered tags and no
     search input preserved the value.
   - GREEN: tags integration slice passes after route and template wiring.
@@ -74,7 +74,8 @@
 - [x] Task: Implement tags search behavior.
   - SDIE mapping: Implementation / Development.
   - Acceptance: `q` filters tags by case-insensitive partial tag name,
-    pagination count uses the filtered result, and empty `q` keeps old behavior.
+    pagination count uses the filtered result, whitespace-only `q` keeps old
+    behavior, and the search input uses a tag-specific placeholder.
   - RED: model and integration tests failed before implementation.
   - GREEN: model, route, and template changes satisfy both tests.
   - Evaluation: implementation follows existing package boundaries and shared UI
@@ -103,7 +104,8 @@
     passed.
   - IT targeted: `TAGS="sqlite sqlite_unlock_notify" make test-sqlite#TestViewTagsListSearch`
     passed, including filtered results, no-results state, retained input value,
-    and pagination links preserving `q`.
+    tag-specific placeholder, whitespace-only `q`, and pagination links
+    preserving `q`.
   - E2E targeted: `PATH="/Users/summer/.local/bin:/Users/summer/.asdf/shims:$PATH" GITEA_E2E_CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" TAGS="sqlite sqlite_unlock_notify" make test-e2e-sqlite#tag-search`
     passed with `1 passed (2.5s)`.
   - E2E test file lint: `npx eslint tests/e2e/tag-search.test.e2e.js` passed.

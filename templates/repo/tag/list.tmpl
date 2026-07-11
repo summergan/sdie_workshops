@@ -6,7 +6,7 @@
 		{{template "repo/release_tag_header" .}}
 		{{if or .Releases .Keyword}}
 		<form class="ui form tw-mb-4" method="get" action="{{.RepoLink}}/tags">
-			{{template "shared/search/combo" dict "Value" .Keyword}}
+			{{template "shared/search/combo" dict "Value" .Keyword "Placeholder" (ctx.Locale.Tr "search.tag_kind")}}
 		</form>
 		{{end}}
 		{{if .Releases}}

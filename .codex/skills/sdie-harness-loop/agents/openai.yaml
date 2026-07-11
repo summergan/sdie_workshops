@@ -1,0 +1,4 @@
+interface:
+  display_name: "SDIE Harness Loop"
+  short_description: "Run SDIE/TDD changes with repo tests"
+  default_prompt: "Use $sdie-harness-loop to implement this repository change with spec, design, tests, and evaluation evidence."

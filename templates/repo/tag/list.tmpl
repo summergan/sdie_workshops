@@ -4,12 +4,17 @@
 	<div class="ui container">
 		{{template "base/alert" .}}
 		{{template "repo/release_tag_header" .}}
+		{{if or .Releases .Keyword}}
+		<form class="ui form tw-mb-4" method="get" action="{{.RepoLink}}/tags">
+			{{template "shared/search/combo" dict "Value" .Keyword}}
+		</form>
+		{{end}}
 		{{if .Releases}}
-		<h4 class="ui top attached header">
-			<div class="five wide column tw-flex tw-items-center">
-				{{svg "octicon-tag" 16 "tw-mr-1"}}{{ctx.Locale.Tr "repo.release.tags"}}
-			</div>
-		</h4>
+			<h4 class="ui top attached header">
+				<div class="five wide column tw-flex tw-items-center">
+					{{svg "octicon-tag" 16 "tw-mr-1"}}{{ctx.Locale.Tr "repo.release.tags"}}
+				</div>
+			</h4>
 		{{$canReadReleases := $.Permission.CanRead ctx.Consts.RepoUnitTypeReleases}}
 		<div class="ui attached table segment">
 			<table class="ui very basic striped fixed table single line" id="tags-table">
@@ -57,6 +62,10 @@
 					{{end}}
 				</tbody>
 			</table>
+		</div>
+		{{else if .Keyword}}
+		<div class="ui segment center aligned">
+			{{ctx.Locale.Tr "no_results"}}
 		</div>
 		{{end}}
 

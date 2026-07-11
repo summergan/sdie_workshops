@@ -2,6 +2,56 @@
 import {devices} from '@playwright/test';
 
 const BASE_URL = process.env.GITEA_URL?.replace?.(/\/$/g, '') || 'http://localhost:3000';
+const SYSTEM_CHROME_PATH = process.env.GITEA_E2E_CHROME_PATH;
+const browserProjects = SYSTEM_CHROME_PATH ? [
+  {
+    name: 'chromium',
+    use: {
+      ...devices['Desktop Chrome'],
+      launchOptions: {
+        executablePath: SYSTEM_CHROME_PATH,
+      },
+    },
+  },
+] : [
+  {
+    name: 'chromium',
+
+    /* Project-specific settings. */
+    use: {
+      ...devices['Desktop Chrome'],
+    },
+  },
+
+  // disabled because of https://github.com/go-gitea/gitea/issues/21355
+  // {
+  //   name: 'firefox',
+  //   use: {
+  //     ...devices['Desktop Firefox'],
+  //   },
+  // },
+
+  {
+    name: 'webkit',
+    use: {
+      ...devices['Desktop Safari'],
+    },
+  },
+
+  /* Test against mobile viewports. */
+  {
+    name: 'Mobile Chrome',
+    use: {
+      ...devices['Pixel 5'],
+    },
+  },
+  {
+    name: 'Mobile Safari',
+    use: {
+      ...devices['iPhone 12'],
+    },
+  },
+];
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -54,45 +104,7 @@ export default {
   },
 
   /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-
-      /* Project-specific settings. */
-      use: {
-        ...devices['Desktop Chrome'],
-      },
-    },
-
-    // disabled because of https://github.com/go-gitea/gitea/issues/21355
-    // {
-    //   name: 'firefox',
-    //   use: {
-    //     ...devices['Desktop Firefox'],
-    //   },
-    // },
-
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-      },
-    },
-
-    /* Test against mobile viewports. */
-    {
-      name: 'Mobile Chrome',
-      use: {
-        ...devices['Pixel 5'],
-      },
-    },
-    {
-      name: 'Mobile Safari',
-      use: {
-        ...devices['iPhone 12'],
-      },
-    },
-  ],
+  projects: browserProjects,
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
   outputDir: 'tests/e2e/test-artifacts/',

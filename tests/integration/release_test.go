@@ -240,6 +240,67 @@ func TestViewTagsList(t *testing.T) {
 	assert.EqualValues(t, []string{"v1.0", "delete-tag", "v1.1"}, tagNames)
 }
 
+func TestViewTagsListSearch(t *testing.T) {
+	defer tests.PrepareTestEnv(t)()
+
+	repo := unittest.AssertExistsAndLoadBean(t, &repo_model.Repository{ID: 1})
+
+	session := loginUser(t, "user1")
+	req := NewRequest(t, "GET", repo.Link()+"/tags?q=DELETE")
+	rsp := session.MakeRequest(t, req, http.StatusOK)
+
+	htmlDoc := NewHTMLParser(t, rsp.Body)
+	tags := htmlDoc.Find(".tag-list-row-link")
+	assert.Equal(t, 1, tags.Length())
+
+	tagNames := make([]string, 0, 1)
+	tags.Each(func(i int, s *goquery.Selection) {
+		tagNames = append(tagNames, s.Text())
+	})
+	assert.EqualValues(t, []string{"delete-tag"}, tagNames)
+
+	searchInput := htmlDoc.Find(`form input[name="q"]`)
+	assert.Equal(t, 1, searchInput.Length())
+	value, exists := searchInput.Attr("value")
+	assert.True(t, exists)
+	assert.Equal(t, "DELETE", value)
+	placeholder, exists := searchInput.Attr("placeholder")
+	assert.True(t, exists)
+	assert.Equal(t, "Search tags...", placeholder)
+
+	req = NewRequest(t, "GET", repo.Link()+"/tags?q=missing-tag")
+	rsp = session.MakeRequest(t, req, http.StatusOK)
+
+	htmlDoc = NewHTMLParser(t, rsp.Body)
+	assert.Equal(t, 0, htmlDoc.Find(".tag-list-row-link").Length())
+	assert.NotEmpty(t, htmlDoc.Find(".ui.segment.center.aligned").Text())
+	value, exists = htmlDoc.Find(`form input[name="q"]`).Attr("value")
+	assert.True(t, exists)
+	assert.Equal(t, "missing-tag", value)
+
+	req = NewRequest(t, "GET", repo.Link()+"/tags?q=%20%20")
+	rsp = session.MakeRequest(t, req, http.StatusOK)
+
+	htmlDoc = NewHTMLParser(t, rsp.Body)
+	tags = htmlDoc.Find(".tag-list-row-link")
+	assert.Equal(t, 3, tags.Length())
+
+	tagNames = make([]string, 0, 3)
+	tags.Each(func(i int, s *goquery.Selection) {
+		tagNames = append(tagNames, s.Text())
+	})
+	assert.EqualValues(t, []string{"v1.0", "delete-tag", "v1.1"}, tagNames)
+	_, exists = htmlDoc.Find(`form input[name="q"]`).Attr("value")
+	assert.False(t, exists)
+
+	req = NewRequest(t, "GET", repo.Link()+"/tags?q=V1&limit=1")
+	rsp = session.MakeRequest(t, req, http.StatusOK)
+
+	htmlDoc = NewHTMLParser(t, rsp.Body)
+	assert.Equal(t, 1, htmlDoc.Find(".tag-list-row-link").Length())
+	assert.Greater(t, htmlDoc.Find(`.pagination.menu a[href*="q=V1"]`).Length(), 0)
+}
+
 func TestDownloadReleaseAttachment(t *testing.T) {
 	defer tests.PrepareTestEnv(t)()
 

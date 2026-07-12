@@ -604,7 +604,11 @@ test-mssql-migration: migrations.mssql.test migrations.individual.mssql.test
 
 .PHONY: playwright
 playwright: deps-frontend
+ifdef GITEA_E2E_CHROME_PATH
+	@echo "Using system Chrome for e2e: $(GITEA_E2E_CHROME_PATH)"
+else
 	npx playwright install $(PLAYWRIGHT_FLAGS)
+endif
 
 .PHONY: test-e2e%
 test-e2e%: TEST_TYPE ?= e2e

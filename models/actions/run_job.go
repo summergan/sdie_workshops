@@ -153,28 +153,34 @@ func UpdateRunJob(ctx context.Context, job *ActionRunJob, cond builder.Cond, col
 }
 
 func aggregateJobStatus(jobs []*ActionRunJob) Status {
-	allDone := true
-	allWaiting := true
-	hasFailure := false
+	allSuccessOrSkipped := len(jobs) != 0
+	allSkipped := len(jobs) != 0
+	var hasFailure, hasCancelled, hasWaiting, hasRunning, hasBlocked bool
 	for _, job := range jobs {
-		if !job.Status.IsDone() {
-			allDone = false
-		}
-		if job.Status != StatusWaiting && !job.Status.IsDone() {
-			allWaiting = false
-		}
-		if job.Status == StatusFailure || job.Status == StatusCancelled {
-			hasFailure = true
-		}
+		allSuccessOrSkipped = allSuccessOrSkipped && job.Status.In(StatusSuccess, StatusSkipped)
+		allSkipped = allSkipped && job.Status == StatusSkipped
+		hasFailure = hasFailure || job.Status == StatusFailure
+		hasCancelled = hasCancelled || job.Status == StatusCancelled
+		hasWaiting = hasWaiting || job.Status == StatusWaiting
+		hasRunning = hasRunning || job.Status == StatusRunning
+		hasBlocked = hasBlocked || job.Status == StatusBlocked
 	}
-	if allDone {
-		if hasFailure {
-			return StatusFailure
-		}
+	switch {
+	case allSkipped:
+		return StatusSkipped
+	case allSuccessOrSkipped:
 		return StatusSuccess
-	}
-	if allWaiting {
+	case hasRunning:
+		return StatusRunning
+	case hasWaiting:
 		return StatusWaiting
+	case hasBlocked:
+		return StatusBlocked
+	case hasCancelled:
+		return StatusCancelled
+	case hasFailure:
+		return StatusFailure
+	default:
+		return StatusUnknown
 	}
-	return StatusRunning
 }

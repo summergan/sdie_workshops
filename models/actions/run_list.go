@@ -113,9 +113,9 @@ type StatusInfo struct {
 
 // GetStatusInfoList returns a slice of StatusInfo
 func GetStatusInfoList(ctx context.Context) []StatusInfo {
-	// same as those in aggregateJobStatus
-	allStatus := []Status{StatusSuccess, StatusFailure, StatusWaiting, StatusRunning}
-	statusInfoList := make([]StatusInfo, 0, 4)
+	// same as those in aggregateJobStatus, except StatusUnknown fallback
+	allStatus := []Status{StatusSuccess, StatusFailure, StatusCancelled, StatusSkipped, StatusWaiting, StatusRunning, StatusBlocked}
+	statusInfoList := make([]StatusInfo, 0, len(allStatus))
 	for _, s := range allStatus {
 		statusInfoList = append(statusInfoList, StatusInfo{
 			Status:          int(s),

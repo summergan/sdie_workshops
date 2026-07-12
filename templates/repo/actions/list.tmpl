@@ -58,8 +58,9 @@
 								{{ctx.Locale.Tr "actions.runs.status_no_select"}}
 							</a>
 							{{range .StatusInfoList}}
-								<a class="item{{if eq .Status $.CurStatus}} active{{end}}" href="?workflow={{$.CurWorkflow}}&actor={{$.CurActor}}&status={{.Status}}">
-									{{.DisplayedStatus}}
+								<a class="item tw-flex tw-items-center tw-gap-2{{if eq .Status $.CurStatus}} active{{end}}" href="?workflow={{$.CurWorkflow}}&actor={{$.CurActor}}&status={{.Status}}">
+									{{template "repo/actions/status" (dict "status" .DisplayedStatus)}}
+									<span>{{ctx.Locale.Tr (printf "actions.status.%s" .DisplayedStatus)}}</span>
 								</a>
 							{{end}}
 						</div>

@@ -223,6 +223,9 @@ func TagsList(ctx *context.Context) {
 		listOptions.PageSize = setting.API.MaxResponseItems
 	}
 
+	keyword := ctx.FormTrim("q")
+	ctx.Data["Keyword"] = keyword
+
 	opts := repo_model.FindReleasesOptions{
 		ListOptions: listOptions,
 		// for the tags list page, show all releases with real tags (having real commit-id),
@@ -230,6 +233,7 @@ func TagsList(ctx *context.Context) {
 		IncludeDrafts: true,
 		IncludeTags:   true,
 		HasSha1:       optional.Some(true),
+		Keyword:       keyword,
 		RepoID:        ctx.Repo.Repository.ID,
 	}
 
@@ -241,7 +245,11 @@ func TagsList(ctx *context.Context) {
 
 	ctx.Data["Releases"] = releases
 
-	numTags := ctx.Data["NumTags"].(int64)
+	numTags, err := db.Count[repo_model.Release](ctx, opts)
+	if err != nil {
+		ctx.ServerError("CountReleasesByRepoID", err)
+		return
+	}
 	pager := context.NewPagination(int(numTags), opts.PageSize, opts.Page, 5)
 	pager.SetDefaultParams(ctx)
 	ctx.Data["Page"] = pager

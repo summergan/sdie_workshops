@@ -17,11 +17,19 @@
   `TAGS="sqlite sqlite_unlock_notify" make test-sqlite#TestViewTagsListSearch`
 - E2E, tags browser flow:
   `PATH="/Users/summer/.local/bin:/Users/summer/.asdf/shims:$PATH" GITEA_E2E_CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" TAGS="sqlite sqlite_unlock_notify" make test-e2e-sqlite#tag-search`
+- UT, Actions run status aggregation:
+  `PATH="/Users/summer/.asdf/shims:$PATH" TAGS="sqlite sqlite_unlock_notify" go test -tags "sqlite sqlite_unlock_notify" ./models/actions -run 'TestAggregateJobStatus|TestGetStatusInfoListIncludesAggregateStatuses' -count=1`
+- IT, Actions run status list/filter visibility:
+  `PATH="/Users/summer/.asdf/shims:$PATH" TAGS="sqlite sqlite_unlock_notify" make test-sqlite#TestActionsRunStatusFilterOptions`
+- E2E, Actions run status filter UI:
+  `PATH="/Users/summer/.local/bin:/Users/summer/.asdf/shims:$PATH" TAGS="sqlite sqlite_unlock_notify" GITEA_E2E_CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" make test-e2e-sqlite#actions-status-filter`
 
 ## Broader Commands
 
 - UT, affected model package:
   `TAGS="sqlite sqlite_unlock_notify" go test -tags "sqlite sqlite_unlock_notify" ./models/repo -count=1`
+- UT, affected Actions model package:
+  `PATH="/Users/summer/.asdf/shims:$PATH" TAGS="sqlite sqlite_unlock_notify" go test -tags "sqlite sqlite_unlock_notify" ./models/actions -count=1`
 - IT, full SQLite integration suite:
   `TAGS="sqlite sqlite_unlock_notify" make test-sqlite`
 - E2E, full SQLite browser suite:

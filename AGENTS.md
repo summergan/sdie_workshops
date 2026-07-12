@@ -35,6 +35,12 @@ Implementation and Evaluation.
 - Tags integration slice: `TAGS="sqlite sqlite_unlock_notify" make test-sqlite#TestViewTagsListSearch`
 - Tags E2E slice with local Chrome:
   `PATH="/Users/summer/.local/bin:/Users/summer/.asdf/shims:$PATH" GITEA_E2E_CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" TAGS="sqlite sqlite_unlock_notify" make test-e2e-sqlite#tag-search`
+- Actions status UT slice:
+  `PATH="/Users/summer/.asdf/shims:$PATH" TAGS="sqlite sqlite_unlock_notify" go test -tags "sqlite sqlite_unlock_notify" ./models/actions -run 'TestAggregateJobStatus|TestGetStatusInfoListIncludesAggregateStatuses' -count=1`
+- Actions status IT slice:
+  `PATH="/Users/summer/.asdf/shims:$PATH" TAGS="sqlite sqlite_unlock_notify" make test-sqlite#TestActionsRunStatusFilterOptions`
+- Actions status E2E slice with local Chrome:
+  `PATH="/Users/summer/.local/bin:/Users/summer/.asdf/shims:$PATH" GITEA_E2E_CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" TAGS="sqlite sqlite_unlock_notify" make test-e2e-sqlite#actions-status-filter`
 - Dev server: `./gitea web -c custom/conf/app.ini`
 
 Use the local Go version declared in `.tool-versions` when available.

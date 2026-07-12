@@ -8,6 +8,9 @@
   database fixtures, permissions, and rendered templates.
 - E2E: Playwright tests under `tests/e2e` that exercise real browser behavior,
   form submission, navigation, and DOM-visible outcomes.
+- UI smoke: Chrome or Playwright checks that compare the changed page against
+  the existing visual pattern, including icons, colors, labels, layout, and
+  screenshot evidence when the change is user-visible.
 
 ## Narrow Commands
 
@@ -23,6 +26,9 @@
   `PATH="/Users/summer/.asdf/shims:$PATH" TAGS="sqlite sqlite_unlock_notify" make test-sqlite#TestActionsRunStatusFilterOptions`
 - E2E, Actions run status filter UI:
   `PATH="/Users/summer/.local/bin:/Users/summer/.asdf/shims:$PATH" TAGS="sqlite sqlite_unlock_notify" GITEA_E2E_CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" make test-e2e-sqlite#actions-status-filter`
+- UI smoke, Actions run status filter:
+  verify the `/actions` page in local Chrome and save a screenshot that shows
+  the changed status filter or status list UI.
 
 ## Broader Commands
 
@@ -34,6 +40,10 @@
   `TAGS="sqlite sqlite_unlock_notify" make test-sqlite`
 - E2E, full SQLite browser suite:
   `TAGS="sqlite sqlite_unlock_notify" make test-e2e-sqlite`
+- UI smoke, changed browser surface:
+  use local Chrome or Playwright to inspect the changed page, compare it to the
+  nearest existing Gitea pattern, and record the screenshot path plus any DOM
+  assertions.
 - Build:
   `TAGS="sqlite sqlite_unlock_notify" make build`
 - Full backend:

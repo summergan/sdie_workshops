@@ -14,5 +14,6 @@
 
 - Verification:
 - Validation:
+- UI smoke:
 - Caveats:
 - Harness improvements:

@@ -11,6 +11,15 @@ Design.
 - Data/API contracts:
 - UI or template contracts:
 
+## UI Validation Design
+
+- Surface:
+- Existing pattern to reuse:
+- Visible labels/icons/states:
+- Locale keys:
+- Responsive/accessibility notes:
+- UI smoke evidence to capture:
+
 ## Task Split
 
 - [ ] Task: [MECE task]

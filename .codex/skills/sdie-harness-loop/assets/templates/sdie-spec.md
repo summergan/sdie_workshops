@@ -29,6 +29,13 @@ Specification.
 
 - [Removed behavior]
 
+## UI Impact
+
+- Affected pages/routes:
+- Browser-visible states:
+- Existing UI pattern to match:
+- If no UI impact, reason:
+
 ## Domain Semantics
 
 - Domain terms:

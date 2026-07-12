@@ -90,8 +90,8 @@ Design.
   - Files: `templates/repo/tag/list.tmpl`.
 
 - [x] Task: Evaluate the full slice.
-  - Acceptance: targeted model test, tags integration test, affected model
-    package test, and build are run; host caveats are recorded.
+  - Acceptance: targeted model test, tags integration test, E2E test, affected
+    model package test, and build are run; host caveats are recorded.
   - Verify: results captured in `tasks/todo.md`.
   - Files: `tasks/todo.md`.
 
@@ -105,8 +105,9 @@ Design.
   model query, web route, template form, and integration test, proving the
   requirement is feasible inside existing Gitea boundaries.
 - Business Analysis x Quality Verification: BDD criteria are represented by the
-  UT keyword test, IT `/tags?q=DELETE` route/template test, E2E browser search
-  flow, and by the empty-search/no-results specification.
+  UT keyword test, IT `/tags?q=DELETE` route/template test, whitespace-only `q`
+  assertion, tag-specific placeholder assertion, E2E browser search flow, and
+  by the empty-search/no-results specification.
 - Technical Design x Engineering Implementation: implementation honors module
   boundaries: model owns SQL conditions, route owns request state and count,
   template owns markup, and existing pagination owns query preservation.

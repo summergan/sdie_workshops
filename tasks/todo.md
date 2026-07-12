@@ -53,7 +53,8 @@
     rows, retained search input value, tag-specific placeholder, whitespace-only
     `q`, no-results state, and pagination links preserving `q`.
   - RED: test failed first because `q=DELETE` returned unfiltered tags and no
-    search input preserved the value.
+    search input preserved the value; later supplemental RED failed because the
+    tags search input still used the generic `Search...` placeholder.
   - GREEN: tags integration slice passes after route and template wiring.
   - Evaluation: protects the user-visible behavior at HTTP/template level.
   - Files: `tests/integration/release_test.go`.
@@ -107,7 +108,7 @@
     tag-specific placeholder, whitespace-only `q`, and pagination links
     preserving `q`.
   - E2E targeted: `PATH="/Users/summer/.local/bin:/Users/summer/.asdf/shims:$PATH" GITEA_E2E_CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" TAGS="sqlite sqlite_unlock_notify" make test-e2e-sqlite#tag-search`
-    passed with `1 passed (2.5s)`.
+    passed with `1 passed (3.2s)`.
   - E2E test file lint: `npx eslint tests/e2e/tag-search.test.e2e.js` passed.
   - Build: `TAGS="sqlite sqlite_unlock_notify" make build` passed.
 - Validation:
